@@ -927,7 +927,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.0",
-  "updatedAt": "2021-05-03T17:27:31.419Z",
+  "updatedAt": "2021-05-13T17:21:02.221Z",
   "devdoc": {
     "events": {
       "Dispute(address,uint256,uint256,uint256)": {

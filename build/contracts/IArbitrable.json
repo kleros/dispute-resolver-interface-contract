@@ -593,7 +593,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.0",
-  "updatedAt": "2021-05-03T17:27:31.415Z",
+  "updatedAt": "2021-05-13T17:21:02.219Z",
   "devdoc": {
     "events": {
       "Ruling(address,uint256,uint256)": {

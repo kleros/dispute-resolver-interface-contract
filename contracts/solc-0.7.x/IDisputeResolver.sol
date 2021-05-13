@@ -22,54 +22,54 @@ abstract contract IDisputeResolver is IArbitrable, IEvidence {
     string public constant VERSION = "1.0.0"; // Can be used to distinguish between multiple deployed versions, if necessary.
 
     /** @dev Raised when a contribution is made, inside fundAppeal function.
-     *  @param localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
-     *  @param round The round number the contribution was made to.
+     *  @param _localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
+     *  @param _round The round number the contribution was made to.
      *  @param ruling Indicates the ruling option which got the contribution.
-     *  @param contributor Caller of fundAppeal function.
-     *  @param amount Contribution amount.
+     *  @param _contributor Caller of fundAppeal function.
+     *  @param _amount Contribution amount.
      */
-    event Contribution(uint256 indexed localDisputeID, uint256 indexed round, uint256 ruling, address indexed contributor, uint256 amount);
+    event Contribution(uint256 indexed _localDisputeID, uint256 indexed _round, uint256 ruling, address indexed _contributor, uint256 _amount);
 
     /** @dev Raised when a contributor withdraws non-zero value.
-     *  @param localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
-     *  @param round The round number the withdrawal was made from.
-     *  @param ruling Indicates the ruling option which contributor gets rewards from.
-     *  @param contributor The beneficiary of withdrawal.
-     *  @param reward Total amount of withdrawal, consists of reimbursed deposits plus rewards.
+     *  @param _localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
+     *  @param _round The round number the withdrawal was made from.
+     *  @param _ruling Indicates the ruling option which contributor gets rewards from.
+     *  @param _contributor The beneficiary of withdrawal.
+     *  @param _reward Total amount of withdrawal, consists of reimbursed deposits plus rewards.
      */
-    event Withdrawal(uint256 indexed localDisputeID, uint256 indexed round, uint256 ruling, address indexed contributor, uint256 reward);
+    event Withdrawal(uint256 indexed _localDisputeID, uint256 indexed _round, uint256 _ruling, address indexed _contributor, uint256 _reward);
 
     /** @dev To be raised when a ruling option is fully funded for appeal.
-     *  @param localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
-     *  @param round Number of the round this ruling option was fully funded in.
-     *  @param ruling The ruling option which just got fully funded.
+     *  @param _localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
+     *  @param _round Number of the round this ruling option was fully funded in.
+     *  @param _ruling The ruling option which just got fully funded.
      */
-    event RulingFunded(uint256 indexed localDisputeID, uint256 indexed round, uint256 indexed ruling);
+    event RulingFunded(uint256 indexed _localDisputeID, uint256 indexed _round, uint256 indexed _ruling);
 
     /** @dev Maps external (arbitrator side) dispute id to local (arbitrable) dispute id.
-     *  @param externalDisputeID Dispute id as in arbitrator contract.
+     *  @param _externalDisputeID Dispute id as in arbitrator contract.
      *  @return localDisputeID Dispute id as in arbitrable contract.
      */
-    function externalIDtoLocalID(uint256 externalDisputeID) external virtual returns (uint256 localDisputeID);
+    function externalIDtoLocalID(uint256 _externalDisputeID) external virtual returns (uint256 localDisputeID);
 
     /** @dev Returns number of possible ruling options. Valid rulings are [0, return value].
-     *  @param localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
+     *  @param _localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
      *  @return count The number of ruling options.
      */
-    function numberOfRulingOptions(uint256 localDisputeID) external view virtual returns (uint256 count);
+    function numberOfRulingOptions(uint256 _localDisputeID) external view virtual returns (uint256 count);
 
     /** @dev Allows to submit evidence for a given dispute.
-     *  @param localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
-     *  @param evidenceURI IPFS path to evidence, example: '/ipfs/Qmarwkf7C9RuzDEJNnarT3WZ7kem5bk8DZAzx78acJjMFH/evidence.json'
+     *  @param _localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
+     *  @param _evidenceURI IPFS path to evidence, example: '/ipfs/Qmarwkf7C9RuzDEJNnarT3WZ7kem5bk8DZAzx78acJjMFH/evidence.json'
      */
-    function submitEvidence(uint256 localDisputeID, string calldata evidenceURI) external virtual;
+    function submitEvidence(uint256 _localDisputeID, string calldata _evidenceURI) external virtual;
 
     /** @dev Manages contributions and calls appeal function of the specified arbitrator to appeal a dispute. This function lets appeals be crowdfunded.
-     *  @param localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
-     *  @param ruling The ruling option to which the caller wants to contribute.
+     *  @param _localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
+     *  @param _ruling The ruling option to which the caller wants to contribute.
      *  @return fullyFunded True if the ruling option got fully funded as a result of this contribution.
      */
-    function fundAppeal(uint256 localDisputeID, uint256 ruling) external payable virtual returns (bool fullyFunded);
+    function fundAppeal(uint256 _localDisputeID, uint256 _ruling) external payable virtual returns (bool fullyFunded);
 
     /** @dev Returns appeal multipliers.
      *  @return winnerStakeMultiplier Winners stake multiplier.
@@ -89,52 +89,52 @@ abstract contract IDisputeResolver is IArbitrable, IEvidence {
         );
 
     /** @dev Allows to withdraw any reimbursable fees or rewards after the dispute gets resolved.
-     *  @param localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
-     *  @param contributor Beneficiary of withdraw operation.
-     *  @param roundNumber Number of the round that caller wants to execute withdraw on.
-     *  @param ruling A ruling option that caller wants to execute withdraw on.
-     *  @return sum The amount that is going to be transfferred to contributor as a result of this function call.
+     *  @param _localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
+     *  @param _contributor Beneficiary of withdraw operation.
+     *  @param _round Number of the round that caller wants to execute withdraw on.
+     *  @param _ruling A ruling option that caller wants to execute withdraw on.
+     *  @return sum The amount that is going to be transferred to contributor as a result of this function call.
      */
     function withdrawFeesAndRewards(
-        uint256 localDisputeID,
-        address payable contributor,
-        uint256 roundNumber,
-        uint256 ruling
+        uint256 _localDisputeID,
+        address payable _contributor,
+        uint256 _round,
+        uint256 _ruling
     ) external virtual returns (uint256 sum);
 
     /** @dev Allows to withdraw any reimbursable fees or rewards after the dispute gets resolved. For multiple ruling options at once.
-     *  @param localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
-     *  @param contributor Beneficiary of withdraw operation.
-     *  @param roundNumber Number of the round that caller wants to execute withdraw on.
-     *  @param contributedTo Ruling options that caller wants to execute withdraw on.
+     *  @param _localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
+     *  @param _contributor Beneficiary of withdraw operation.
+     *  @param _round Number of the round that caller wants to execute withdraw on.
+     *  @param _contributedTo Ruling options that caller wants to execute withdraw on.
      */
     function withdrawFeesAndRewardsForMultipleRulings(
-        uint256 localDisputeID,
-        address payable contributor,
-        uint256 roundNumber,
-        uint256[] memory contributedTo
+        uint256 _localDisputeID,
+        address payable _contributor,
+        uint256 _round,
+        uint256[] memory _contributedTo
     ) external virtual;
 
     /** @dev Allows to withdraw any rewards or reimbursable fees after the dispute gets resolved. For multiple rulings options and for all rounds at once.
-     *  @param localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
-     *  @param contributor Beneficiary of withdraw operation.
-     *  @param contributedTo Ruling options that caller wants to execute withdraw on.
+     *  @param _localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
+     *  @param _contributor Beneficiary of withdraw operation.
+     *  @param _contributedTo Ruling options that caller wants to execute withdraw on.
      */
     function withdrawFeesAndRewardsForAllRounds(
-        uint256 localDisputeID,
-        address payable contributor,
-        uint256[] memory contributedTo
+        uint256 _localDisputeID,
+        address payable _contributor,
+        uint256[] memory _contributedTo
     ) external virtual;
 
     /** @dev Returns the sum of withdrawable amount.
-     *  @param localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
-     *  @param contributor Beneficiary of withdraw operation.
-     *  @param contributedTo Ruling options that caller wants to get withdrawable amount from.
+     *  @param _localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
+     *  @param _contributor Beneficiary of withdraw operation.
+     *  @param _contributedTo Ruling options that caller wants to get withdrawable amount from.
      *  @return sum The total amount available to withdraw.
      */
     function getTotalWithdrawableAmount(
-        uint256 localDisputeID,
-        address payable contributor,
-        uint256[] memory contributedTo
+        uint256 _localDisputeID,
+        address payable _contributor,
+        uint256[] memory _contributedTo
     ) external view virtual returns (uint256 sum);
 }
