@@ -136,5 +136,5 @@ abstract contract IDisputeResolver is IArbitrable, IEvidence {
         uint256 localDisputeID,
         address payable contributor,
         uint256[] memory contributedTo
-    ) public view virtual returns (uint256 sum);
+    ) external view virtual returns (uint256 sum);
 }
