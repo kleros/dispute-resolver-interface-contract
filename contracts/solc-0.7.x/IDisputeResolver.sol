@@ -15,7 +15,7 @@ import "@kleros/erc-792/contracts/erc-1497/IEvidence.sol";
 import "@kleros/erc-792/contracts/IArbitrator.sol";
 
 /**
- *  @title This serves as a standard interface for crowdfunded appeals and evidence submission, which are not already standardized by IArbitrable.
+ *  @title This serves as a standard interface for crowdfunded appeals and evidence submission, which aren't a part of the arbitration (erc-792 and erc-1497) standard yet.
     This interface is used in Dispute Resolver (resolve.kleros.io).
  */
 abstract contract IDisputeResolver is IArbitrable, IEvidence {
@@ -60,7 +60,7 @@ abstract contract IDisputeResolver is IArbitrable, IEvidence {
 
     /** @dev Allows to submit evidence for a given dispute.
      *  @param localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
-     *  @param evidenceURI IPFS path to evidence, example: '/ipfs/QmYua74eToq6mUpNSEeZUREFZtcWYCrKP6MBepz8C9hTVy/wtf.txt'
+     *  @param evidenceURI IPFS path to evidence, example: '/ipfs/Qmarwkf7C9RuzDEJNnarT3WZ7kem5bk8DZAzx78acJjMFH/evidence.json'
      */
     function submitEvidence(uint256 localDisputeID, string calldata evidenceURI) external virtual;
 
@@ -88,12 +88,12 @@ abstract contract IDisputeResolver is IArbitrable, IEvidence {
             uint256 denominator
         );
 
-    /** @dev Allows to withdraw any reimbursable fees or rewards after the dispute gets solved.
+    /** @dev Allows to withdraw any reimbursable fees or rewards after the dispute gets resolved.
      *  @param localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
      *  @param contributor Beneficiary of withdraw operation.
      *  @param roundNumber Number of the round that caller wants to execute withdraw on.
      *  @param ruling A ruling option that caller wants to execute withdraw on.
-     *  @return sum The amount that is going to be transfferred to contributor as a result of this function call, if it's not zero.
+     *  @return sum The amount that is going to be transfferred to contributor as a result of this function call.
      */
     function withdrawFeesAndRewards(
         uint256 localDisputeID,
@@ -102,7 +102,7 @@ abstract contract IDisputeResolver is IArbitrable, IEvidence {
         uint256 ruling
     ) external virtual returns (uint256 sum);
 
-    /** @dev Allows to withdraw any reimbursable fees or rewards after the dispute gets solved. For multiple ruling options at once.
+    /** @dev Allows to withdraw any reimbursable fees or rewards after the dispute gets resolved. For multiple ruling options at once.
      *  @param localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
      *  @param contributor Beneficiary of withdraw operation.
      *  @param roundNumber Number of the round that caller wants to execute withdraw on.
@@ -129,7 +129,7 @@ abstract contract IDisputeResolver is IArbitrable, IEvidence {
     /** @dev Returns the sum of withdrawable amount.
      *  @param localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
      *  @param contributor Beneficiary of withdraw operation.
-     *  @param contributedTo Ruling options that caller wants to execute withdraw on.
+     *  @param contributedTo Ruling options that caller wants to get withdrawable amount from.
      *  @return sum The total amount available to withdraw.
      */
     function getTotalWithdrawableAmount(
