@@ -2,7 +2,7 @@
 
 /**
  *  @authors: [@ferittuncer]
- *  @reviewers: [@mtsalenc*, @hbarcelos*, @unknownunknown1*, @MerlinEgalite, @fnanni-0*]
+ *  @reviewers: [@mtsalenc*, @hbarcelos*, @unknownunknown1*, @MerlinEgalite, @fnanni-0*, @shalzz]
  *  @auditors: []
  *  @bounties: []
  *  @deployments: []
