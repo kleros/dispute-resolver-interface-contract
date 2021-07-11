@@ -19,7 +19,7 @@ import "@kleros/erc-792/contracts/IArbitrator.sol";
     This interface is used in Dispute Resolver (resolve.kleros.io).
  */
 abstract contract IDisputeResolver is IArbitrable, IEvidence {
-    string public constant VERSION = "1.0.0"; // Can be used to distinguish between multiple deployed versions, if necessary.
+    string public constant VERSION = "2.0.0"; // Can be used to distinguish between multiple deployed versions, if necessary.
 
     /** @dev Raised when a contribution is made, inside fundAppeal function.
      *  @param _localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
@@ -102,39 +102,26 @@ abstract contract IDisputeResolver is IArbitrable, IEvidence {
         uint256 _ruling
     ) external virtual returns (uint256 sum);
 
-    /** @dev Allows to withdraw any reimbursable fees or rewards after the dispute gets resolved. For multiple ruling options at once.
-     *  @param _localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
-     *  @param _contributor Beneficiary of withdraw operation.
-     *  @param _round Number of the round that caller wants to execute withdraw on.
-     *  @param _contributedTo Ruling options that caller wants to execute withdraw on.
-     */
-    function withdrawFeesAndRewardsForMultipleRulings(
-        uint256 _localDisputeID,
-        address payable _contributor,
-        uint256 _round,
-        uint256[] memory _contributedTo
-    ) external virtual;
-
     /** @dev Allows to withdraw any rewards or reimbursable fees after the dispute gets resolved. For multiple rulings options and for all rounds at once.
      *  @param _localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
      *  @param _contributor Beneficiary of withdraw operation.
-     *  @param _contributedTo Ruling options that caller wants to execute withdraw on.
+     *  @param _ruling Ruling option that caller wants to execute withdraw on.
      */
     function withdrawFeesAndRewardsForAllRounds(
         uint256 _localDisputeID,
         address payable _contributor,
-        uint256[] memory _contributedTo
+        uint256 _ruling
     ) external virtual;
 
     /** @dev Returns the sum of withdrawable amount.
      *  @param _localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
      *  @param _contributor Beneficiary of withdraw operation.
-     *  @param _contributedTo Ruling options that caller wants to get withdrawable amount from.
+     *  @param _ruling Ruling option that caller wants to get withdrawable amount from.
      *  @return sum The total amount available to withdraw.
      */
     function getTotalWithdrawableAmount(
         uint256 _localDisputeID,
         address payable _contributor,
-        uint256[] memory _contributedTo
+        uint256 _ruling
     ) external view virtual returns (uint256 sum);
 }
