@@ -102,7 +102,7 @@ abstract contract IDisputeResolver is IArbitrable, IEvidence {
         uint256 _ruling
     ) external virtual returns (uint256 sum);
 
-    /** @dev Allows to withdraw any rewards or reimbursable fees after the dispute gets resolved. For multiple rulings options and for all rounds at once.
+    /** @dev Allows to withdraw any rewards or reimbursable fees after the dispute gets resolved for all rounds at once.
      *  @param _localDisputeID Identifier of a dispute in scope of arbitrable contract. Arbitrator ids can be translated to local ids via externalIDtoLocalID.
      *  @param _contributor Beneficiary of withdraw operation.
      *  @param _ruling Ruling option that caller wants to execute withdraw on.
